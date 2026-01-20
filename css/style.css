@@ -2,11 +2,12 @@
    CSS Variables & Reset
    =================================== */
 :root {
-    /* Colors */
+    /* Colors - Warm Palette */
     --color-primary: #FFFFFF;
-    --color-secondary: #F8F9FA;
-    --color-accent: #4ECDC4;
-    --color-accent-dark: #3db8b0;
+    --color-secondary: #FFF8F5;
+    --color-accent: #FF6B6B;
+    --color-accent-dark: #e55a5a;
+    --color-accent-light: #FFE8E8;
     --color-text: #333333;
     --color-text-light: #666666;
     --color-text-lighter: #999999;
@@ -266,7 +267,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e8f4f3 100%);
+    background: linear-gradient(135deg, #FFF9F7 0%, #FFE8E8 100%);
     overflow: hidden;
 }
 
@@ -277,7 +278,7 @@ button {
     right: -20%;
     width: 80%;
     height: 150%;
-    background: linear-gradient(45deg, rgba(78, 205, 196, 0.1) 0%, rgba(78, 205, 196, 0.05) 100%);
+    background: linear-gradient(45deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%);
     border-radius: 50%;
     z-index: 0;
 }
@@ -327,7 +328,7 @@ button {
 
 .image-placeholder {
     aspect-ratio: 4/5;
-    background: linear-gradient(135deg, var(--color-secondary) 0%, #e8f4f3 100%);
+    background: linear-gradient(135deg, var(--color-secondary) 0%, #FFE8E8 100%);
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
@@ -467,7 +468,7 @@ button {
 
 .gallery-placeholder {
     aspect-ratio: 1;
-    background: linear-gradient(135deg, var(--color-secondary) 0%, #e8f4f3 100%);
+    background: linear-gradient(135deg, var(--color-secondary) 0%, #FFE8E8 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -478,7 +479,7 @@ button {
 
 .gallery-item:hover .gallery-placeholder {
     transform: scale(1.05);
-    background: linear-gradient(135deg, #e8f4f3 0%, rgba(78, 205, 196, 0.2) 100%);
+    background: linear-gradient(135deg, #FFE8E8 0%, rgba(255, 107, 107, 0.15) 100%);
 }
 
 /* Lightbox */
@@ -646,7 +647,7 @@ button {
 .map-placeholder {
     height: 100%;
     min-height: 350px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, #e8f4f3 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, #FFE8E8 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
