@@ -6,6 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a static website for Lerna Babikyan Creative Dance Studio. The site is built with vanilla HTML, CSS, and JavaScript without any build tools or frameworks.
 
+**External Dependencies**:
+- Google Fonts (Poppins font family) - loaded via CDN
+
 ## Development
 
 ### Running Locally
@@ -62,4 +65,12 @@ Three breakpoints:
 - **CSS Variables**: All design tokens defined in `:root` for consistency
 - **Progressive enhancement**: Core content accessible without JavaScript
 - **Intersection Observer**: Used for scroll animations instead of scroll event listeners
-- **Placeholder content**: Image placeholders throughout for future real images
+- **Staggered animations**: `addStaggeredDelay()` applies progressive delays to card animations
+
+## Content Placeholders
+
+The following placeholders need to be replaced for production:
+- **Gallery**: 6 image placeholders (`.gallery-placeholder`)
+- **About section**: Instructor photo (`.image-placeholder`)
+- **Contact section**: Google Maps embed (`.map-placeholder`)
+- **Social links**: Currently "#" - need real URLs for Instagram, Facebook, YouTube
