@@ -4,11 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Lerna Babikyan Creative Dance Studio - Inspiring young minds through movement. Dance classes for children and youth.">
+    <meta name="keywords" content="creative dance, dance classes, children dance, youth dance, dance studio, Lerna Babikyan, dance education, kids dance lessons">
+    <meta name="author" content="Lerna Babikyan">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://lernababikyan.com/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lernababikyan.com/">
+    <meta property="og:title" content="Lerna Babikyan | Creative Dance Studio">
+    <meta property="og:description" content="Inspiring young minds through movement. Creative dance classes for children and youth ages 4-17.">
+    <meta property="og:image" content="https://lernababikyan.com/images/og-image.jpg">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Lerna Babikyan Creative Dance Studio">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://lernababikyan.com/">
+    <meta name="twitter:title" content="Lerna Babikyan | Creative Dance Studio">
+    <meta name="twitter:description" content="Inspiring young minds through movement. Creative dance classes for children and youth ages 4-17.">
+    <meta name="twitter:image" content="https://lernababikyan.com/images/og-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
     <title>Lerna Babikyan | Creative Dance Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DanceSchool",
+        "name": "Lerna Babikyan Creative Dance Studio",
+        "description": "Inspiring young minds through movement. Creative dance classes for children and youth ages 4-17.",
+        "url": "https://lernababikyan.com",
+        "telephone": "+1 (555) 123-4567",
+        "email": "info@lernababikyan.com",
+        "image": "https://lernababikyan.com/images/studio.jpg",
+        "priceRange": "$$",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "123 Dance Street",
+            "addressLocality": "Creative City",
+            "postalCode": "12345",
+            "addressCountry": "US"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "40.7128",
+            "longitude": "-74.0060"
+        },
+        "openingHoursSpecification": [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Wednesday"],
+                "opens": "15:00",
+                "closes": "18:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Tuesday", "Thursday"],
+                "opens": "15:00",
+                "closes": "17:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": "Friday",
+                "opens": "17:00",
+                "closes": "19:00"
+            }
+        ],
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Dance Classes",
+            "itemListElement": [
+                {
+                    "@type": "Course",
+                    "name": "Little Movers",
+                    "description": "Introduction to creative movement through play, stories, and imagination for ages 4-7.",
+                    "audience": {
+                        "@type": "Audience",
+                        "audienceType": "Children ages 4-7"
+                    }
+                },
+                {
+                    "@type": "Course",
+                    "name": "Young Artists",
+                    "description": "Developing technique and artistry through creative choreography for ages 8-12.",
+                    "audience": {
+                        "@type": "Audience",
+                        "audienceType": "Children ages 8-12"
+                    }
+                },
+                {
+                    "@type": "Course",
+                    "name": "Teen Expressions",
+                    "description": "Advanced creative dance focusing on contemporary techniques and improvisation for ages 13-17.",
+                    "audience": {
+                        "@type": "Audience",
+                        "audienceType": "Teens ages 13-17"
+                    }
+                }
+            ]
+        },
+        "sameAs": [
+            "https://instagram.com/lernababikyan",
+            "https://facebook.com/lernababikyan",
+            "https://youtube.com/lernababikyan"
+        ]
+    }
+    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -318,6 +430,6 @@
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="js/main.js" defer></script>
 </body>
 </html>
