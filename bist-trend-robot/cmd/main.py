@@ -22,6 +22,7 @@ from bistrobot.backtest.engine import Backtester
 from bistrobot.config.loader import ConfigError, load_config
 from bistrobot.data.mock_provider import MockDataProvider
 from bistrobot.data.provider import IDataProvider
+from bistrobot.data.yahoo_provider import YahooDataProvider
 from bistrobot.engine.main_loop import MainLoop
 from bistrobot.execution.executor import IOrderExecutor
 from bistrobot.execution.mock_executor import MockOrderExecutor
@@ -36,13 +37,21 @@ log = get_logger("main")
 # Fabrika fonksiyonları — gerçek API'ye geçişte yalnızca burayı değiştirin.
 # ---------------------------------------------------------------------------
 def build_data_provider(cfg: dict) -> IDataProvider:
-    """Veri sağlayıcıyı üretir.
+    """Config'teki ``data.provider`` değerine göre veri sağlayıcıyı üretir.
+
+    - "mock"  → sentetik veri (offline geliştirme/test)
+    - "yahoo" → Yahoo Finance'ten gerçek BIST verisi (read-only)
 
     # >>> GERÇEK API ENTEGRASYON NOKTASI:
-    #     cfg["broker"]["name"] == "MockBroker" değilse, gerçek aracı kurumun
-    #     IDataProvider implementasyonunu döndürün.
+    #     Aracı kurumunuzun resmî veri akışı için IDataProvider'ı uygulayan
+    #     yeni bir sınıf ekleyip aşağıdaki seçime bağlayın.
     """
+    provider = str(cfg.get("data", {}).get("provider", "mock")).lower()
+    if provider == "yahoo":
+        log.info("Veri sağlayıcı: Yahoo Finance (GERÇEK BIST verisi, read-only)")
+        return YahooDataProvider()
     bars = int(cfg.get("backtest", {}).get("bars", 1500))
+    log.info("Veri sağlayıcı: Mock (sentetik veri)")
     return MockDataProvider(seed=42, bars=bars)
 
 
@@ -61,6 +70,24 @@ def build_strategy(cfg: dict) -> TrendStrategy:
     return TrendStrategy(TrendParams.from_config(cfg["strategy"]))
 
 
+def _fetch_series(provider: IDataProvider, symbol: str, timeframe: str,
+                  limit: int):
+    """Backtest için sembolün tüm/azami geçmiş serisini provider-agnostik çeker.
+
+    MockDataProvider'da `full_series` varsa onu, aksi halde IDataProvider
+    arayüzündeki `get_historical_candles`'ı kullanır. Veri/ağ hatasında
+    boş liste döndürür (backtest tek sembol yüzünden çökmesin).
+    """
+    try:
+        full = getattr(provider, "full_series", None)
+        if callable(full):
+            return full(symbol, timeframe)
+        return provider.get_historical_candles(symbol, timeframe, limit)
+    except Exception as exc:  # noqa: BLE001 — sağlayıcı/ağ hatasını yut
+        log.error("[%s] veri alınamadı: %s", symbol, exc)
+        return []
+
+
 # ---------------------------------------------------------------------------
 # Mod çalıştırıcıları
 # ---------------------------------------------------------------------------
@@ -72,9 +99,15 @@ def run_backtest(cfg: dict) -> int:
         cfg.get("backtest", {}).get("initial_balance", risk_params.account_balance))
     commission = float(cfg.get("backtest", {}).get("commission_pct", 0.0))
 
-    provider = MockDataProvider(seed=42, bars=int(cfg.get("backtest", {}).get("bars", 1500)))
-    data = {sym: provider.full_series(sym, cfg["app"]["timeframe"])
+    provider = build_data_provider(cfg)
+    bars = int(cfg.get("backtest", {}).get("bars", 1500))
+    data = {sym: _fetch_series(provider, sym, cfg["app"]["timeframe"], bars)
             for sym in cfg["symbols"]}
+    # Boş seri gelen sembolleri ele (ör. Yahoo'da bulunamayan kod).
+    data = {s: c for s, c in data.items() if c}
+    if not data:
+        log.error("Backtest için veri alınamadı (semboller/sağlayıcı kontrol edin).")
+        return 1
 
     bt = Backtester(strategy, risk_params, commission)
     result = bt.run(data)

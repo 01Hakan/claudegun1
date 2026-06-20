@@ -23,6 +23,9 @@ genişletilebilir bir algoritmik trade robotu iskeleti.
     noktaları kod içinde yorumlarla işaretlenmiştir).
 - **Soyut arayüzler**: `IDataProvider` ve `IOrderExecutor` sayesinde farklı
   veri sağlayıcılar / aracı kurumlar kolayca takılıp çıkarılabilir.
+- **Gerçek veri**: Yahoo Finance entegrasyonu (`YahooDataProvider`) ile API
+  anahtarı GEREKMEDEN gerçek BIST mum verisi (semboller otomatik `.IS`'e
+  eşlenir). Offline geliştirme için sentetik `MockDataProvider` da mevcut.
 - **İndikatörler**: SMA, EMA, RSI, MACD, ATR (saf Python, harici bağımlılık
   gerektirmez).
 - **Risk yönetimi**: işlem başına risk %, günlük zarar limiti, eşzamanlı
@@ -68,6 +71,7 @@ bist-trend-robot/
 │   ├── config/loader.py         # Config okuma + doğrulama
 │   ├── data/provider.py         # IDataProvider arayüzü + Candle modeli
 │   ├── data/mock_provider.py    # Sentetik/örnek veri sağlayıcı
+│   ├── data/yahoo_provider.py   # GERÇEK BIST verisi (Yahoo Finance, read-only)
 │   ├── strategy/indicators.py   # SMA, EMA, RSI, MACD, ATR
 │   ├── strategy/base.py         # Strategy arayüzü + Signal modeli
 │   ├── strategy/trend_strategy.py
@@ -117,6 +121,30 @@ python -m pytest tests/ -v
 # veya harici bağımlılık olmadan:
 python -m unittest discover -s tests -v
 ```
+
+## Gerçek BIST Verisi (Yahoo Finance)
+
+`config/config.yaml` içindeki `data.provider` anahtarı ile veri kaynağı seçilir:
+
+```yaml
+data:
+  provider: "yahoo"   # "yahoo" = gerçek BIST verisi · "mock" = sentetik/offline
+```
+
+`YahooDataProvider`:
+- API anahtarı **gerektirmez**, saf Python (`urllib`) — ek bağımlılık yok.
+- Sembol eşlemesi otomatik: `AKBNK.E` / `AKBNK` → `AKBNK.IS` (Yahoo formatı).
+- `1m / 5m / 15m / 30m / 1h / 1d` intraday mum desteği.
+- Yalnızca **tamamlanmış** mumları döndürür (oluşmakta olan yarım son mum
+  filtrelenir) → look-ahead/yanıltıcı sinyal önlenir.
+- Üstel geri-çekilmeli retry; zaman damgaları Europe/Istanbul'a çevrilir.
+
+> ⚠️ **Ağ erişimi gerekir.** Yahoo verisi ücretsiz, gecikmeli ve resmî
+> değildir; eğitim/geliştirme ve backtest içindir. Kısıtlı ağ ortamlarında
+> (ör. allowlist'li çalıştırma ortamları) `query1.finance.yahoo.com`
+> erişime açık değilse istek başarısız olur — bu durumda ya ağ politikasını
+> bu hosta izin verecek şekilde ayarlayın ya da `provider: "mock"` kullanın.
+> Canlı emir akışı için aracı kurumunuzun resmî API'sini tercih edin.
 
 ## Gerçek API'ye Geçiş
 

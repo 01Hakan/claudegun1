@@ -22,6 +22,13 @@ broker:
   api_secret: "PLACEHOLDER_API_SECRET"    # Üretim: "${ENV:BIST_API_SECRET}"
   base_url: "https://api.placeholder-broker.example/v1"
 
+# --- Veri sağlayıcı seçimi --------------------------------------------------
+# mock  : sentetik veri (offline geliştirme/test)
+# yahoo : Yahoo Finance'ten GERÇEK BIST verisi (API anahtarı gerekmez,
+#         internet erişimi gerekir; semboller otomatik .IS'e eşlenir)
+data:
+  provider: "yahoo"
+
 # --- İşlem görülecek BIST sembolleri ---------------------------------------
 # BIST sembol yapısı: "<KOD>.E" (Equity/pay piyasası). Ör: AKBNK.E, THYAO.E
 symbols:
