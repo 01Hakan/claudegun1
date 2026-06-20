@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Loglar
+logs/
+*.log
+
+# Test/araç önbellekleri
+.pytest_cache/
+.mypy_cache/
+.coverage

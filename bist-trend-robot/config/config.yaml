@@ -1,0 +1,68 @@
+# ============================================================================
+# BIST Kısa Vadeli Trend Trade Robotu — Konfigürasyon
+# ============================================================================
+# GÜVENLİK UYARISI:
+#   - Gerçek API anahtarlarınızı ASLA bu dosyaya yazıp versiyon kontrolüne
+#     (git) eklemeyin. Aşağıdaki değerler PLACEHOLDER'dır.
+#   - Üretimde anahtarları ortam değişkeni (env var) ile verin; loader
+#     "${ENV:DEGISKEN_ADI}" sözdizimini destekler.
+# ============================================================================
+
+# --- Genel çalışma ayarları -------------------------------------------------
+app:
+  mode: "paper"          # backtest | paper | live
+  timeframe: "1h"        # Ana strateji zaman dilimi (1 saatlik mumlar)
+  poll_interval_sec: 60  # Canlı/paper döngüde veri çekme aralığı (saniye)
+  base_currency: "TRY"
+
+# --- Aracı kurum / veri sağlayıcı kimlik bilgileri (PLACEHOLDER) ------------
+broker:
+  name: "MockBroker"
+  api_key: "PLACEHOLDER_API_KEY"          # Üretim: "${ENV:BIST_API_KEY}"
+  api_secret: "PLACEHOLDER_API_SECRET"    # Üretim: "${ENV:BIST_API_SECRET}"
+  base_url: "https://api.placeholder-broker.example/v1"
+
+# --- İşlem görülecek BIST sembolleri ---------------------------------------
+# BIST sembol yapısı: "<KOD>.E" (Equity/pay piyasası). Ör: AKBNK.E, THYAO.E
+symbols:
+  - "AKBNK.E"
+  - "THYAO.E"
+  - "GARAN.E"
+  - "ASELS.E"
+
+# --- Strateji parametreleri -------------------------------------------------
+strategy:
+  name: "trend"
+  ema_fast: 12           # Kısa dönem EMA periyodu
+  ema_slow: 26           # Uzun dönem EMA periyodu (trend yönü belirleyici)
+  rsi_period: 14
+  rsi_lower: 30.0        # RSI alt eşiği (giriş için geçerli bant başı)
+  rsi_upper: 70.0        # RSI üst eşiği (giriş için geçerli bant sonu)
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+  atr_period: 14
+  atr_stop_mult: 1.5     # Stop-loss = giriş - 1.5 * ATR (long için)
+  risk_reward: 2.0       # Take-profit risk/ödül oranı (1:2)
+  allow_short: false     # BIST'te açığa satış kısıtlı; varsayılan kapalı
+
+# --- Risk yönetimi parametreleri -------------------------------------------
+risk:
+  account_balance: 100000.0   # Başlangıç/simülasyon hesap bakiyesi (TRY)
+  risk_per_trade_pct: 1.0     # İşlem başına riske edilen sermaye yüzdesi (%)
+  daily_max_loss_pct: 3.0     # Günlük maksimum zarar limiti (%)
+  max_open_positions: 3       # Aynı anda açık olabilecek maks. pozisyon
+
+# --- Backtest ayarları ------------------------------------------------------
+backtest:
+  start: "2024-01-01"
+  end: "2024-03-31"
+  initial_balance: 100000.0
+  commission_pct: 0.05        # İşlem başına komisyon yüzdesi (%)
+  bars: 1500                  # Sentetik veri kullanılırsa üretilecek mum sayısı
+
+# --- Loglama ----------------------------------------------------------------
+logging:
+  level: "INFO"               # DEBUG | INFO | WARN | ERROR
+  to_file: false
+  file_path: "logs/robot.log"

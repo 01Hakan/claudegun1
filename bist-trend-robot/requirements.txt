@@ -1,0 +1,10 @@
+# BIST Trend Robotu — bağımlılıklar
+#
+# Çekirdek robot SAF PYTHON ile çalışır; aşağıdakiler opsiyoneldir:
+#
+# PyYAML: config.yaml'ı tam YAML olarak okumak için (kurulu değilse
+#         loader gömülü basit ayrıştırıcıya düşer).
+PyYAML>=6.0
+#
+# pytest: birim testlerini çalıştırmak için (alternatif: stdlib unittest).
+pytest>=7.0
