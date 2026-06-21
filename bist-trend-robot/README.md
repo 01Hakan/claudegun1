@@ -113,6 +113,29 @@ python -m cmd.main --mode paper --config config/config.yaml --iterations 5
 python -m cmd.main --mode live --config config/config.yaml
 ```
 
+## Tek Gün "Ne Olurdu?" Simülatörü
+
+Belirli bir işlem gününde 100.000 TL ile robotun ne yapacağını ve gün sonu
+K/Z'sini gösterir. Hedef günden önceki barlar yalnızca indikatör ısınması
+için kullanılır; işlemler yalnızca hedef gün içinde açılır.
+
+```bash
+# Gerçek veri (internet erişimi olan ortamda):
+python -m cmd.daysim --provider yahoo --balance 100000
+python -m cmd.daysim --provider yahoo --date 2024-06-14 --timeframe 1h
+
+# Sentetik veri ile (offline demo — GERÇEK DEĞİL):
+python -m cmd.daysim --provider mock
+```
+
+Örnek rapor: veri kaynağı, hedef gün, başlangıç/gün sonu sermaye, gün K/Z'si
+(% ile), işlem sayısı, kazanma oranı, gün içi max düşüş, komisyon ve her
+işlemin (sembol/yön/adet/giriş/çıkış/K/Z/neden) dökümü.
+
+> ⚠️ Tek günlük sonuç **istatistiksel olarak anlamsızdır** ve gelecek
+> performans garantisi değildir; strateji başarısı ancak uzun dönemli
+> backtest + paper trading ile değerlendirilir.
+
 ## Testler
 
 ```bash

@@ -66,10 +66,19 @@ class Backtester:
         self.risk_params = risk_params
         self.commission_pct = commission_pct
 
-    def run(self, candles_by_symbol: Dict[str, List[Candle]]) -> BacktestResult:
+    def run(self, candles_by_symbol: Dict[str, List[Candle]],
+            trade_from_ts=None) -> BacktestResult:
         """Verilen sembol->mum verisi sözlüğü üzerinde backtest yapar.
 
         Tüm semboller aynı zaman ekseninde, bar-bar ilerletilir.
+
+        Args:
+            candles_by_symbol: Sembol -> kronolojik mum listesi.
+            trade_from_ts: (Opsiyonel) datetime. Verilirse, bu zamandan
+                ÖNCEKİ barlarda YENİ pozisyon AÇILMAZ; o barlar yalnızca
+                indikatör ısınması (warm-up) için kullanılır. Bu zamandan
+                itibaren normal işlem mantığı çalışır. (Tek-gün "ne olurdu?"
+                senaryosu için kullanılır.)
         """
         risk = RiskManager(self.risk_params)
         executor = MockOrderExecutor(self.commission_pct, on_close=risk.register_close)
@@ -91,7 +100,13 @@ class Backtester:
                 ts = window[-1].timestamp
 
                 # 1) Açık pozisyonlar için stop/TP kontrolü (cari fiyatla).
+                #    Bu, işlem penceresinden önce açılmış pozisyon olmadığından
+                #    pencere öncesinde etkisizdir; pencere içinde aktiftir.
                 executor.mark_price(symbol, price, ts)
+
+                # İşlem penceresi başlamadıysa: yalnızca ısınma, yeni emir yok.
+                if trade_from_ts is not None and ts < trade_from_ts:
+                    continue
 
                 # 2) Sinyal üret.
                 signal = self.strategy.generate_signal(window)
